@@ -7,6 +7,7 @@ namespace StyledControls
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private StylesCollection styles = null;
+        private StyledControls.ListViewColumnSorter sorter = null;
         private ListViewItemsCollection items = null;
 
         [System.ComponentModel.Category("Behavior")]
@@ -60,8 +61,10 @@ namespace StyledControls
             this.components = new System.ComponentModel.Container();
             this.styles = new StylesCollection();
             this.items = new ListViewItemsCollection(this, this.OnNewItemAdded);
-            //this.OnDrawItem += 
+            this.sorter = new StyledControls.ListViewColumnSorter();
+            this.ListViewItemSorter = this.sorter;
             this.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.DrawShadedItem);
+            this.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.OnColunmClickSort);
         }
 
         #endregion

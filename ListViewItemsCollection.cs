@@ -73,5 +73,9 @@ namespace StyledControls
             return new_item;
         }
 
+        //public void AddRange(System.Windows.Forms.ListViewItem [] collection){
+        //    base.AddRange(collection);
+        //    return;
+        //}
     }
 }

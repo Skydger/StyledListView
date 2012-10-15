@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FontFamilyCollection.cs" />
+    <Compile Include="ListViewColumnSorter.cs" />
     <Compile Include="ListViewItemsCollection.cs" />
     <Compile Include="ListViewItemsShader.cs" />
     <Compile Include="StyledListView.cs">

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 namespace StyledControls
 {
     public delegate void NewItemAdded(int index, System.Windows.Forms.ListViewItem item);
+    //public delegate void NewItemsAdded(int index, System.Windows.Forms.ListViewItem item);
 
     public partial class StyledListView : System.Windows.Forms.ListView{
 
@@ -17,14 +18,14 @@ namespace StyledControls
             /// <summary>
             /// Required for Windows.Forms Class Composition Designer support
             /// </summary>
-            container.Add(this);
+            //this.container.Add(this);
             this.InitializeComponent();
             this.ShadeItems();
             base.Refresh();
         }
 
         public StyledListView(){
-            InitializeComponent();
+            this.InitializeComponent();
             base.Refresh();
         }
 
@@ -61,12 +62,28 @@ namespace StyledControls
         private void DrawShadedItem(object sender, DrawListViewItemEventArgs e)
         {
             //base.OnDrawItem(e);
-            //MessageBox.Show("fff");
             e.Item.BackColor = this.styles[(e.ItemIndex + 1) % this.styles.Count].BackgroundColor;
             e.Item.Font = this.styles[(e.ItemIndex + 1) % this.styles.Count].Font;
-            //e.Item.ForeColor = this.styles[(e.ItemIndex + 1) % this.styles.Count].ForegroundColor;
-            //e.Item.EnsureVisible();
-            //this.ShadeItems();
+            e.Item.ForeColor = this.styles[(e.ItemIndex + 1) % this.styles.Count].ForegroundColor;
+        }
+
+        private void OnColunmClickSort(object sender, ColumnClickEventArgs e){
+            if (e.Column == this.sorter.SortColumn){
+                // Reverse the current sort direction for this column.
+                if (this.sorter.Order == SortOrder.Ascending){
+                    this.sorter.Order = SortOrder.Descending;
+                }else{
+                    this.sorter.Order = SortOrder.Ascending;
+                }
+            }else{
+                // Set the column number that is to be sorted; default to ascending.
+                this.sorter.SortColumn = e.Column;
+                this.sorter.Order = SortOrder.Ascending;
+            }
+            // Perform the sort with these new sort options.
+            this.Sort();
+            this.ShadeItems();
+            return;
         }
 
         protected override void OnResize(EventArgs e){
@@ -87,11 +104,16 @@ namespace StyledControls
                 foreach (System.Windows.Forms.ListViewItem lvi in this.Items){
                     //MessageBox.Show("code " + i.ToString() + " " + styles[i-1].Color.ToString() );
                     if( lvi != null){
-                        lvi.BackColor = this.styles[ i++ % this.styles.Count].BackgroundColor;
-                        lvi.Font = this.styles[i++ % this.styles.Count].Font;
-                        //lvi.ForeColor = this.styles[i++ % this.styles.Count].ForegroundColor;
-                        //lvi.Font = new Font(
-                        lvi.UseItemStyleForSubItems = true;
+                        // saving default color
+                        System.Drawing.Color df_bkcolor = lvi.BackColor;
+                        System.Drawing.Color df_fgcolor = lvi.ForeColor;
+                        System.Drawing.Font df_font = lvi.Font;
+                        
+                        StyledControls.Style style = this.styles[ i++ % this.styles.Count];
+                        lvi.BackColor = style.BackgroundColor;
+                        lvi.Font = style.Font;
+                        lvi.ForeColor = style.ForegroundColor;
+                        lvi.UseItemStyleForSubItems = style.UseFullRow;
                     }
                 }
             }
