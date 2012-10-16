@@ -53,17 +53,25 @@ namespace StyledControls
             if (listviewX.Group == listviewY.Group){
 
                 // Сравнение значений
+                System.DateTime dt1, dt2;
                 int ix = 0, iy = 0;
                 string l1s = "0";
                 string l2s = "0";
-                if (listviewX.SubItems.Count > ColumnToSort) l1s = (string)listviewX.SubItems[ColumnToSort];
-                if (listviewY.SubItems.Count > ColumnToSort) l2s = (string)listviewY.SubItems[ColumnToSort];
+                if (listviewX.SubItems.Count > ColumnToSort) l1s = listviewX.SubItems[ColumnToSort].Text;
+                if (listviewY.SubItems.Count > ColumnToSort) l2s = listviewY.SubItems[ColumnToSort].Text;
                 if (System.Int32.TryParse(l1s, out ix) &&
                     System.Int32.TryParse(l2s, out iy))
                 {
                     compareResult = ix - iy;
+                }else if( System.DateTime.TryParse(l1s, out dt1 ) &&
+                          System.DateTime.TryParse(l2s, out dt2) 
+                         ){
+                    compareResult = System.DateTime.Compare(dt1, dt2 );
                 }else{
-                    compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text);
+                    if (l1s.Length == 0) l1s = " ";
+                    if (l2s.Length == 0) l2s = " ";
+                    //compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text);
+                    compareResult = string.Compare(l1s, l2s);
                 }
 
                 // Calculate correct return value based on object comparison
